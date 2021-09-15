@@ -96,6 +96,26 @@ const Lists = () => {
     });
   };
 
+  const markComplete = (todo) => { 
+    const request = {
+      name: todo.name,
+      id: todo.id,
+      isComplete: true,
+    };
+    fetch(HOST_API + "/todos", {
+      method: "PUT",
+      body: JSON.stringify(request),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((todo) => {
+        console.log(todo)
+        dispatch({ type: "check-item", item: todo });
+      });
+  };
+  
   const onEdit = (todo) => {
     dispatch({ type: "edit-item", item: todo });
   };
@@ -125,6 +145,9 @@ const Lists = () => {
                 <td>{todo.id}</td>
                 <td>{todo.name}</td>
                 <td>{todo.isComplete === true ? "Si" : "No"}</td>
+                <td>
+                  <button onClick={markComplete(todo)}> Completada </button>
+                </td>
                 <td>
                   <button onClick={() => onDelete(todo.id)}> Eliminar </button>
                 </td>
@@ -163,6 +186,15 @@ function reducer(state, action) {
         return item;
       });
       return { ...state, list: listUpdateEdit, item: {} };
+    case "check-item":
+      const listUpdateCheck = state.list.map((item) => {
+        if (item.id === action.item.id) {
+          return action.item;
+        }
+        return item;
+      });
+      console.log(action.item)
+      return { ...state, list: listUpdateCheck, item: action.item };
     default:
       return state;
   }
