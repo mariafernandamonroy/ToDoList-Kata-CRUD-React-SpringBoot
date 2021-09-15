@@ -88,6 +88,14 @@ const Form = () => {
 const Lists = () => {
   const { dispatch, state } = useContext(Store);
 
+  useEffect(() => {
+    fetch(HOST_API + "/todos")
+      .then((response) => response.json())
+      .then((list) => {
+        dispatch({ type: "update-list", list });
+      });
+  }, [state.list.length, dispatch]);
+
   const onDelete = (id) => {
     fetch(HOST_API + "/" + id + "/todos", {
       method: "DELETE",
@@ -112,7 +120,7 @@ const Lists = () => {
       .then((response) => response.json())
       .then((todo) => {
         console.log(todo)
-        dispatch({ type: "check-item", item: todo });
+        dispatch({ type: "update-item", item: todo });
       });
   };
 
@@ -120,13 +128,7 @@ const Lists = () => {
     dispatch({ type: "edit-item", item: todo });
   };
 
-  useEffect(() => {
-    fetch(HOST_API + "/todos")
-      .then((response) => response.json())
-      .then((list) => {
-        dispatch({ type: "update-list", list });
-      });
-  }, [state.list.length, dispatch]);
+  
 
   return (
     <div>
@@ -171,7 +173,7 @@ function reducer(state, action) {
       const newList = state.list;
       newList.push(action.item);
       return { ...state, list: newList };
-    case "detele-item":
+    case "delete-item":
       const listUpdate = state.list.filter((item) => {
         return item.id !== action.id;
       });
@@ -186,15 +188,6 @@ function reducer(state, action) {
         return item;
       });
       return { ...state, list: listUpdateEdit, item: {} };
-    case "check-item":
-      const listUpdateCheck = state.list.map((item) => {
-        if (item.id === action.item.id) {
-          return action.item;
-        }
-        return item;
-      });
-      console.log(action.item)
-      return { ...state, list: listUpdateCheck, item: {} };
     default:
       return state;
   }
