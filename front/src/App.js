@@ -27,7 +27,7 @@ const Form = () => {
     const request = {
       name: state.name,
       id: null,
-      isComplete: false,
+      completed: false,
     };
 
     fetch(HOST_API + "/todos", {
@@ -50,7 +50,7 @@ const Form = () => {
     const request = {
       name: state.name,
       id: item.id,
-      isComplete: item.isComplete,
+      completed: item.completed,
     };
 
     fetch(HOST_API + "/todos", {
@@ -100,7 +100,7 @@ const Lists = () => {
     const request = {
       name: todo.name,
       id: todo.id,
-      isComplete: true,
+      completed: true,
     };
     fetch(HOST_API + "/todos", {
       method: "PUT",
@@ -115,7 +115,7 @@ const Lists = () => {
         dispatch({ type: "check-item", item: todo });
       });
   };
-  
+
   const onEdit = (todo) => {
     dispatch({ type: "edit-item", item: todo });
   };
@@ -144,9 +144,9 @@ const Lists = () => {
               <tr key={index}>
                 <td>{todo.id}</td>
                 <td>{todo.name}</td>
-                <td>{todo.isComplete === true ? "Si" : "No"}</td>
+                <td>{todo.completed === true ? "Si" : "No"}</td>
                 <td>
-                  <button onClick={markComplete(todo)}> Completada </button>
+                  <button onClick={() =>markComplete(todo)}> Completada </button>
                 </td>
                 <td>
                   <button onClick={() => onDelete(todo.id)}> Eliminar </button>
@@ -194,7 +194,7 @@ function reducer(state, action) {
         return item;
       });
       console.log(action.item)
-      return { ...state, list: listUpdateCheck, item: action.item };
+      return { ...state, list: listUpdateCheck, item: {} };
     default:
       return state;
   }
