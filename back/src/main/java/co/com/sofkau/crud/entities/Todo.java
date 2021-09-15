@@ -10,7 +10,7 @@ public class Todo {
     @GeneratedValue
     private Long id;
     private String name;
-    private boolean isCompleted;
+    private boolean Completed;
 
     public Long getId() {
         return id;
@@ -29,10 +29,11 @@ public class Todo {
     }
 
     public boolean isCompleted() {
-        return isCompleted;
+        return Completed;
     }
 
-    public void setCompleted(boolean completed) {
-        isCompleted = completed;
+    public void setCompleted(boolean Completed) {
+        this.Completed = Completed;
     }
+
 }
