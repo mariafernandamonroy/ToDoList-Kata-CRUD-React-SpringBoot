@@ -33,12 +33,12 @@ public class TodoController {
     }
 
     @DeleteMapping(value = "/api/{id}/todos")
-    public void delete(@PathParam("id") Long id){
+    public void delete(@PathVariable("id") Long id){
         service.delete(id);
     }
 
     @GetMapping(value = "/api/{id}/todos")
-    public Todo get(@PathParam("id") Long id){
+    public Todo get(@PathVariable("id") Long id){
         return service.get(id);
     }
 }
